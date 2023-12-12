@@ -1,26 +1,19 @@
-schemaVersion: 2.1.0
+apiVersion: 2.0.0
 metadata:
-  name: python-hello-world
+  name: ubuntu-devfile
+projects:
+  - name: my-project
+    source:
+      location: https://github.com/DineshDevarajan/devfiles
+    paths:
+      - /projects/my-project
 components:
-  - name: tools
-    container:
-      image: ubuntu:latest
+  - instance:
+      name: ubuntu
+      image: quay.io/centos/centos:8
+      command: tail
+      args:
+        - -f
       volumeMounts:
-        - name: venv
-          path: /home/user/.venv
-      memoryLimit: 512Mi
-      mountSources: true
-
-  - name: venv
-    volume:
-      size: 1G
-
-commands:
-  - id: run-application
-    exec:
-      label: "Run application"
-      component: tools
-      workingDir: ${PROJECT_SOURCE}
-      commandLine: "python3 hello-world.py"
-      group:
-        kind: run
+        - name: projects
+          mountPath: /projects
